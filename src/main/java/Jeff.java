@@ -37,10 +37,27 @@ public class Jeff {
             } 
             else {
                 if (taskCount < tasks.length) {
-                    tasks[taskCount] = new Task(input);
+
+                    switch (cmd.toLowerCase()) {
+                        case "todo":
+                            tasks[taskCount] = new Todo(split[1]);
+                            break;
+                        case "deadline":
+                            String[] deadlineParts = split[1].split("/by", 2);
+                            tasks[taskCount] = new Deadline(deadlineParts[0].trim(), deadlineParts[1].trim());
+                            break;
+                        case "event":
+                            String[] eventParts = split[1].split("/at", 2);
+                            tasks[taskCount] = new Event(eventParts[0].trim(), eventParts[1].trim());
+                            break;
+                       
+                    }
+
+                    
                     taskCount++;
                     System.out.println("______________________________");
-                    System.out.println("added: " + input);
+                    System.out.println("Task has been added: " + input);
+                    System.out.println("You now have " + taskCount + " tasks in the list.");
                     System.out.println("______________________________");
                 } else {
                     System.out.println("Task list is full!");
