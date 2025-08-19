@@ -22,4 +22,9 @@ Task marked as done!
 ______________________________
 Task marked as undone!
 [D] [ ] (by: Sunday)
+Task has been deleted.
+You now have 2 tasks in the list.
+Invalid task number. Please try again.
+1. [T] [ ] borrow book
+2. [E] [ ] project meeting (from: Mon 2pm /to 4pm)
 Bye! Hope to you see you again soon!

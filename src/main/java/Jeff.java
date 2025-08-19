@@ -26,9 +26,13 @@ public class Jeff {
                             }
                         }
                     } else if (cmd.equalsIgnoreCase("bye")) {
+
                         break;
+
                     } else if (split.length < 2) {
+
                         throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
+
                     } 
                         else if (cmd.equalsIgnoreCase("mark")) {
 
@@ -43,7 +47,25 @@ public class Jeff {
                         tasks[length - 1].undo();
                         System.out.println("Task marked as undone!");
                         System.out.println(tasks[length - 1]);
-                    } 
+                    } else if (cmd.equalsIgnoreCase("delete")) {
+
+                        int idx = (Integer.parseInt(split[1]) - 1); // This would be the index to be deleted.
+
+                        if (idx < 0 || idx >= taskCount) {
+                            throw new JeffException("Invalid task number. Please try again.");
+                        }
+
+                        for (int i = idx; i < taskCount - 1; i++) {
+                            tasks[i] = tasks[i + 1];
+                        }
+
+                        tasks[taskCount - 1] = null; 
+                        taskCount--;
+                        System.out.println("Task has been deleted.");
+                        System.out.println("You now have " + taskCount + " tasks in the list.");
+
+                        
+                    }
                     else {
                         if (taskCount < tasks.length) {
 
