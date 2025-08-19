@@ -1,1 +1,24 @@
-"Hello! I am Jeff! Your own personal chatbot.
+Hello! I am Jeff! Your own personal chatbot.
+
+What can I do for you?
+______________________________
+Task has been added: todo borrow book
+You now have 1 tasks in the list.
+______________________________
+______________________________
+Task has been added: deadline return book /by Sunday
+You now have 2 tasks in the list.
+______________________________
+______________________________
+Task has been added: event project meeting /at Mon 2pm /to 4pm
+You now have 3 tasks in the list.
+______________________________
+1. [T] [ ] borrow book
+2. [D] [ ] (by: Sunday)
+3. [E] [ ] project meeting (from: Mon 2pm /to 4pm)
+Task marked as done!
+[D] [X] (by: Sunday)
+______________________________
+Task marked as undone!
+[D] [ ] (by: Sunday)
+Bye! Hope to you see you again soon!
