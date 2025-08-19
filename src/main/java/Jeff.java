@@ -1,4 +1,3 @@
-
 public class Jeff {
     public static void main(String[] args) {
         System.out.println("Hello! I am Jeff! Your own personal chatbot.\n");
@@ -6,24 +5,39 @@ public class Jeff {
             "What can I do for you?"
         );
 
-        String[] tasks = new String[100];
+        Task[] tasks = new Task[100];
         int taskCount = 0;
 
         while (true) {
             String input = System.console().readLine();
+            String[] split = input.split("\\s+", 2);
+            String cmd = split[0];
 
-            if (input.equalsIgnoreCase("list")) {
+            if (cmd.equalsIgnoreCase("list")) {
                 for (int i = 0; i < tasks.length; i++) {
                     if (tasks[i] != null) {
                         System.out.println((i + 1) + ". " + tasks[i]);
                     }
                 }
-            } else if (input.equalsIgnoreCase("bye")) {
+            } else if (cmd.equalsIgnoreCase("bye")) {
                 break;
-            }
+            } else if (cmd.equalsIgnoreCase("mark")) {
+
+                int length = Integer.parseInt(split[1]);
+                tasks[length - 1].markAsDone();
+                System.out.println("Task marked as done!");
+                System.out.println(tasks[length - 1]);
+                System.out.println("______________________________");
+
+            } else if (cmd.equalsIgnoreCase("unmark")) {
+                int length = Integer.parseInt(split[1]);
+                tasks[length - 1].undo();
+                System.out.println("Task marked as undone!");
+                System.out.println(tasks[length - 1]);
+            } 
             else {
                 if (taskCount < tasks.length) {
-                    tasks[taskCount] = input;
+                    tasks[taskCount] = new Task(input);
                     taskCount++;
                     System.out.println("______________________________");
                     System.out.println("added: " + input);
@@ -37,4 +51,5 @@ public class Jeff {
         System.out.println("Bye! Hope to you see you again soon!\n");
 
     }
+
 }
