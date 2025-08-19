@@ -13,6 +13,7 @@ ______________________________
 Task has been added: event project meeting /at Mon 2pm /to 4pm
 You now have 3 tasks in the list.
 ______________________________
+EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.
 1. [T] [ ] borrow book
 2. [D] [ ] (by: Sunday)
 3. [E] [ ] project meeting (from: Mon 2pm /to 4pm)
