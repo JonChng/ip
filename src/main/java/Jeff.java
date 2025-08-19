@@ -1,5 +1,9 @@
+import java.util.Scanner;
+
 public class Jeff {
     public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
         System.out.println("Hello! I am Jeff! Your own personal chatbot.\n");
         System.out.println(
             "What can I do for you?"
@@ -8,8 +12,8 @@ public class Jeff {
         Task[] tasks = new Task[100];
         int taskCount = 0;
 
-        while (true) {
-            String input = System.console().readLine();
+        while (sc.hasNextLine()) {
+            String input = sc.nextLine().trim();
             String[] split = input.split("\\s+", 2);
             String cmd = split[0];
 
@@ -65,7 +69,8 @@ public class Jeff {
             }
 
         }
-        System.out.println("Bye! Hope to you see you again soon!\n");
+        System.out.println("Bye! Hope to you see you again soon!");
+        sc.close();
 
     }
 
