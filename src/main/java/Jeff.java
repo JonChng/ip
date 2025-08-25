@@ -98,14 +98,25 @@ public class Jeff {
                             break;
 
                         case DEADLINE:
-                            String[] deadlineParts = split[1].split("/by", 2);
-                            tasks.add(new Deadline(deadlineParts[0].trim(), deadlineParts[1].trim()));
+                            String[] parts;
+                            if (split[1].contains("/by")) {
+                                parts = split[1].split("/by", 2);
+                            } else {
+                                parts = split[1].split(" ", 2);
+                            }
+                            tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
                             added(input, tasks);
                             break;
 
                         case EVENT:
-                            String[] eventParts = split[1].split("/at", 2);
-                            tasks.add(new Event(eventParts[0].trim(), eventParts[1].trim()));
+
+                            String[] parts2;
+                            if (split[1].contains("/at")) {
+                                parts = split[1].split("/at", 2);
+                            } else {
+                                parts = split[1].split(" ", 2);
+                            }
+                            tasks.add(new Event(parts[0].trim(), parts[1].trim()));
                             added(input, tasks);
                             break;
                         
@@ -133,6 +144,13 @@ public class Jeff {
         String description = t.getDescription();
 
         String formatted = String.format("%s|%s|%s", type, done, description);
+
+        if (type == "D") {
+            formatted += "|" + ((Deadline) t).getForStorage(); // this is ok beacuse type is deadline, safe typecast
+        } else if (type == "E") {
+            formatted += "|" + ((Event) t).getForStorage(); // this is ok beacuse type is event, safe typecast
+        }
+
         return formatted;
     }
 

@@ -3,13 +3,14 @@ import java.time.format.DateTimeFormatter;
 
 public class Event extends Task {
 
+    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     protected LocalDateTime at;
+    
 
     public Event(String description, String at) {
         super(description, "E");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
-        this.at = LocalDateTime.parse(at, formatter);
+        this.at = parseDate(at.trim());
     }
 
     public String getAt() {
@@ -17,9 +18,26 @@ public class Event extends Task {
         return at.format(formatter);
     }
 
-    @Override
-    public String toString() {
-        return "[E]" + super.toString() + description + " (from: " + getAt() + ")";
+    public String getForStorage() {
+        return at.format(FORMAT);
+    }
+
+    private static LocalDateTime parseDate(String date) {
+
+        String[] acceptableFormats = {"d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm"};
+
+        for (String format : acceptableFormats) {
+            try {
+                return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
+            } catch (Exception e) {
+            }
+        }
+        return null;
     }
     
+
+    @Override
+    public String toString() {
+        return "[E]" + super.toString() + description + " (at: " + getAt() + ")";
+    }
 }
