@@ -23,16 +23,8 @@ public class Jeff {
         );
 
         Storage storage = new Storage();
-        ArrayList<String> lines = storage.load();
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskList tasks = new TaskList();
 
-
-        for (String line : lines) {
-            Task task = parseTask(line);
-            if (task != null) {
-                tasks.add(task);
-            }
-        }
         System.out.println("Loaded " + tasks.size() + " task(s) from storage.");
 
 
@@ -183,7 +175,7 @@ public class Jeff {
         return task;
     }
 
-    private static void added(String input, ArrayList<Task> tasks) {
+    private static void added(String input, TaskList tasks) {
         System.out.println("______________________________");
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
@@ -191,9 +183,10 @@ public class Jeff {
         
     }
 
-    private static void updateStorage(ArrayList<Task> tasks, Storage storage) {
+    private static void updateStorage(TaskList tasks, Storage storage) {
         ArrayList<String> lines = new ArrayList<>();
-        for (Task task : tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
             lines.add(formatTask(task));
         }
         storage.save(lines);
