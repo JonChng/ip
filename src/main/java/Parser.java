@@ -6,7 +6,7 @@ public class Parser {
         
         Command cmd = Command.fromString(split[0]);
         if (cmd == null) {
-            throw new JeffException("Invalid command!");
+            throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
         }
 
         return cmd;
