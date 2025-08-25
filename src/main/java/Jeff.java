@@ -1,5 +1,5 @@
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 enum Command {
     LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
@@ -22,7 +22,20 @@ public class Jeff {
             "What can I do for you?"
         );
 
+        Storage storage = new Storage();
+        ArrayList<String> lines = storage.load();
         ArrayList<Task> tasks = new ArrayList<>();
+
+
+        for (String line : lines) {
+            Task task = parseTask(line);
+            if (task != null) {
+                tasks.add(task);
+            }
+        }
+        System.out.println("Loaded " + tasks.size() + " task(s) from storage.");
+
+
         boolean shouldBreak = false;
         
             while (!shouldBreak && sc.hasNextLine()) {
@@ -97,6 +110,7 @@ public class Jeff {
                             break;
                         
                     }
+                    updateStorage(tasks, storage);
                     
 
                     } 
@@ -112,11 +126,59 @@ public class Jeff {
 
     }
 
+    private static String formatTask(Task t) {
+
+        String done = t.isDone() ? "1" : "0";
+        String type = t.getType();
+        String description = t.getDescription();
+
+        String formatted = String.format("%s|%s|%s", type, done, description);
+        return formatted;
+    }
+
+    private static Task parseTask(String line) {
+        String[] parts = line.split("\\|");
+        String type = parts[0];
+        boolean isDone = parts[1].equals("1");
+        String description = parts[2];
+
+        Task task;
+
+        switch (type) {
+        case "T": 
+            task = new Todo(description);
+            break;
+        case "D": 
+            task = new Deadline(description, parts[3]);
+            break;
+        case "E": 
+            task = new Event(description, parts[3]);
+            break;
+        default: 
+            return null;
+        }
+
+        if (isDone) {
+            task.markAsDone();
+        }
+
+        return task;
+    }
+
     private static void added(String input, ArrayList<Task> tasks) {
         System.out.println("______________________________");
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
         System.out.println("______________________________");
+        
+    }
+
+    private static void updateStorage(ArrayList<Task> tasks, Storage storage) {
+        ArrayList<String> lines = new ArrayList<>();
+        for (Task task : tasks) {
+            lines.add(formatTask(task));
+        }
+        storage.save(lines);
     }
 
 
