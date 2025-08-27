@@ -4,7 +4,7 @@ package jeff.command;
  * Enumeration of all available commands in the Jeff chatbot system.
  */
 public enum Command {
-    LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
+    LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND;
 
     /**
      * Convert string to Command enum value.

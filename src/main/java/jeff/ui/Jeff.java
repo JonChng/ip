@@ -52,7 +52,6 @@ public class Jeff {
                     throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
                 }
 
-                System.out.println("cmd: " + cmd);
                 switch (cmd) {
                     case LIST:
                         for (int i = 0; i < tasks.size(); i++) {
@@ -123,6 +122,11 @@ public class Jeff {
                         added(input, tasks);
                         break;
 
+                    case FIND:
+                        String keyword = description;
+                        findTasks(tasks, keyword);
+                        break;
+
                 }
                 updateStorage(tasks, storage);
 
@@ -131,6 +135,21 @@ public class Jeff {
             }
         }
         System.out.println("Bye! Hope to you see you again soon!");
+
+    }
+
+    private static void findTasks(TaskList tasks, String keyword) {
+
+        System.out.println("______________________________");
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().contains(keyword)) {
+
+                System.out.println((i + 1) + ". " + task);
+            }
+        }
+        System.out.println("______________________________");
 
     }
 
