@@ -7,10 +7,14 @@ public class Deadline extends Task {
     protected LocalDateTime by;
     
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by) throws JeffException {
         super(description, "D");
 
-        this.by = parseDate(by.trim());
+        try {
+            this.by = parseDate(by.trim());
+        } catch (JeffException e) {
+            throw new JeffException(e.getMessage());
+        }
     }
 
     public String getBy() {
@@ -22,7 +26,7 @@ public class Deadline extends Task {
         return by.format(FORMAT);
     }
 
-    private static LocalDateTime parseDate(String date) {
+    private static LocalDateTime parseDate(String date) throws JeffException {
 
         String[] acceptableFormats = {"d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm"};
 
@@ -30,6 +34,7 @@ public class Deadline extends Task {
             try {
                 return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
             } catch (Exception e) {
+                throw new JeffException("Invalid date format. Please use the format: yyyy-MM-dd HHmm");
             }
         }
         return null;
