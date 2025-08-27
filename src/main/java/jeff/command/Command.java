@@ -1,8 +1,8 @@
 package jeff.command;
 
 public enum Command {
-    LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
-    
+    LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND;
+
     public static Command fromString(String command) {
         try {
             return Command.valueOf(command.toUpperCase());
