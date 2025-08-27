@@ -4,13 +4,14 @@ package jeff.task;
  * Base class for all task types in the Jeff chatbot system.
  */
 public class Task {
+
     protected String description;
     protected boolean isDone;
     protected String type;
 
     /**
      * Constructs a new Task with the specified description and type.
-     * 
+     *
      * @param description the task description
      * @param type the task type (T, D, or E)
      */
@@ -22,6 +23,7 @@ public class Task {
 
     /**
      * Get visual status icon.
+     *
      * @return "[X]" if done, "[ ]" if not done
      */
     public String getStatusIcon() {
@@ -44,6 +46,7 @@ public class Task {
 
     /**
      * Get task description.
+     *
      * @return the task description string
      */
     public String getDescription() {
@@ -52,6 +55,7 @@ public class Task {
 
     /**
      * Check if task is done.
+     *
      * @return true if the task is done, false otherwise
      */
     public boolean isDone() {
@@ -60,6 +64,7 @@ public class Task {
 
     /**
      * Get task type.
+     *
      * @return the task type string
      */
     public String getType() {
@@ -68,6 +73,7 @@ public class Task {
 
     /**
      * Return string representation of task.
+     *
      * @return the status icon string
      */
     @Override

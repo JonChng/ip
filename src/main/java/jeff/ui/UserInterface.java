@@ -3,15 +3,16 @@ package jeff.ui;
 import java.util.Scanner;
 
 /**
- * Handles user interface operations for the Jeff chatbot.
- * Manages user input/output.
+ * Handles user interface operations for the Jeff chatbot. Manages user
+ * input/output.
  */
-
 public class UserInterface {
+
     private final Scanner sc;
 
     /**
-     * Constructor for the UserInterface class with a Scanner for reading user input.
+     * Constructor for the UserInterface class with a Scanner for reading user
+     * input.
      */
     public UserInterface() {
         sc = new Scanner(System.in);
@@ -26,8 +27,9 @@ public class UserInterface {
     }
 
     /**
-     * Reads a command from the user via standard input.
-     * If input is empty, returns empty string.
+     * Reads a command from the user via standard input. If input is empty,
+     * returns empty string.
+     *
      * @return the user's input command as a string
      */
     public String readCommand() {
@@ -45,7 +47,8 @@ public class UserInterface {
     }
 
     /**
-     * Prints error message. 
+     * Prints error message.
+     *
      * @param msg the error message to display
      */
     public void printError(String msg) {
