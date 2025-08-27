@@ -12,7 +12,17 @@ import jeff.storage.Storage;
 import jeff.storage.JeffException;
 import jeff.ui.UserInterface;
 
+/**
+ * Main application for Jeff the automated chatbot.
+ */
 public class Jeff {
+    /**
+     * Entry point for the Jeff chatbot application.
+     * Initializes and runs the system.
+     * 
+     * @param args command line arguments (not used)
+     * @throws JeffException if an error occurs during execution
+     */
     public static void main(String[] args) throws JeffException {
 
         UserInterface ui = new UserInterface();
