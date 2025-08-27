@@ -16,11 +16,8 @@ enum Command {
 public class Jeff {
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Hello! I am Jeff! Your own personal chatbot.\n");
-        System.out.println(
-            "What can I do for you?"
-        );
+        UserInterface ui = new UserInterface();
+        ui.welcome();
 
         Storage storage = new Storage();
         TaskList tasks = new TaskList();
