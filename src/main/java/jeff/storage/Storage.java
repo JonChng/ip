@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Manages saving and loading task data to/from the file system.
  */
 public class Storage {
+
     private static final String FILE_PATH = "data/tasks.txt";
 
     /**
@@ -44,7 +45,7 @@ public class Storage {
         try {
             Path path = Paths.get(FILE_PATH);
             Files.createDirectories(path.getParent());
-            Files.write(path, lines); 
+            Files.write(path, lines);
             System.out.println("Tasks saved successfully!");
 
         } catch (IOException e) {

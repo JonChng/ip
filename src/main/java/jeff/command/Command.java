@@ -5,9 +5,10 @@ package jeff.command;
  */
 public enum Command {
     LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
-    
+
     /**
      * Convert string to Command enum value.
+     *
      * @param command the string representation of the command
      * @return the corresponding Command enum value
      */

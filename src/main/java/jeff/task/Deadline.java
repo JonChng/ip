@@ -9,7 +9,6 @@ public class Deadline extends Task {
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     protected LocalDateTime by;
-    
 
     public Deadline(String description, String by) throws JeffException {
         super(description, "D");
@@ -43,10 +42,9 @@ public class Deadline extends Task {
         }
         return null;
     }
-    
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() +  "(by: " + getBy() + ")";
+        return "[D]" + super.toString() + "(by: " + getBy() + ")";
     }
 }
