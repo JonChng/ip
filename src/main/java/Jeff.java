@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 enum Command {
     LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
@@ -14,42 +13,36 @@ enum Command {
 }
 
 public class Jeff {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JeffException {
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Hello! I am Jeff! Your own personal chatbot.\n");
-        System.out.println(
-            "What can I do for you?"
-        );
+        UserInterface ui = new UserInterface();
+        ui.welcome();
 
         Storage storage = new Storage();
-        ArrayList<String> lines = storage.load();
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskList tasks = new TaskList();
 
-
-        for (String line : lines) {
-            Task task = parseTask(line);
-            if (task != null) {
-                tasks.add(task);
-            }
-        }
         System.out.println("Loaded " + tasks.size() + " task(s) from storage.");
 
 
         boolean shouldBreak = false;
         
-            while (!shouldBreak && sc.hasNextLine()) {
+            while (!shouldBreak) {
                 try {
-                    String input = sc.nextLine().trim();
-                    String[] split = input.split("\\s+", 2);
-                    Command cmd = Command.fromString(split[0]);
+                    String input = ui.readCommand();
 
+                    Parser.Result result = Parser.parseCommand(input);
+                    Command cmd = result.command;
+                    String description = result.description; // this is the args
 
-                    
+                    if (cmd == Command.BYE) {
+                        shouldBreak = true;
+                    }
+
                     if (cmd == null) {
                         throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
                     }
 
+                    System.out.println("cmd: " + cmd);
                     switch (cmd) {
                         case LIST:
                             for (int i = 0; i < tasks.size(); i++) {
@@ -65,7 +58,7 @@ public class Jeff {
 
                         case MARK:
 
-                            int markIdx = Integer.parseInt(split[1]);
+                            int markIdx = Integer.parseInt(description);
                             tasks.get(markIdx - 1).markAsDone();
                             System.out.println("Task marked as done!");
                             System.out.println(tasks.get(markIdx - 1));
@@ -74,7 +67,7 @@ public class Jeff {
                         
                         case UNMARK:
 
-                            int unmarkIdx = Integer.parseInt(split[1]);
+                            int unmarkIdx = Integer.parseInt(description);
                             tasks.get(unmarkIdx - 1).undo();
                             System.out.println("Task marked as undone!");
                             System.out.println(tasks.get(unmarkIdx - 1));
@@ -82,7 +75,7 @@ public class Jeff {
 
                         case DELETE:
 
-                            int idx = (Integer.parseInt(split[1]) - 1); // This would be the index to be deleted.
+                            int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
 
                             if (idx < 0 || idx >= tasks.size()) {
                                 throw new JeffException("Invalid task number. Please try again.");
@@ -93,16 +86,16 @@ public class Jeff {
                             break;
                         
                         case TODO:
-                            tasks.add(new Todo(split[1]));
+                            tasks.add(new Todo(description));
                             added(input, tasks);
                             break;
 
                         case DEADLINE:
                             String[] parts;
-                            if (split[1].contains("/by")) {
-                                parts = split[1].split("/by", 2);
+                            if (description.contains("/by")) {
+                                parts = description.split("/by", 2);
                             } else {
-                                parts = split[1].split(" ", 2);
+                                parts = description.split(" ", 2);
                             }
                             tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
                             added(input, tasks);
@@ -111,10 +104,10 @@ public class Jeff {
                         case EVENT:
 
                             String[] parts2;
-                            if (split[1].contains("/at")) {
-                                parts = split[1].split("/at", 2);
+                            if (description.contains("/at")) {
+                                parts = description.split("/at", 2);
                             } else {
-                                parts = split[1].split(" ", 2);
+                                parts = description.split(" ", 2);
                             }
                             tasks.add(new Event(parts[0].trim(), parts[1].trim()));
                             added(input, tasks);
@@ -133,7 +126,6 @@ public class Jeff {
             } 
         } 
         System.out.println("Bye! Hope to you see you again soon!");
-        sc.close();
 
     }
 
@@ -154,7 +146,7 @@ public class Jeff {
         return formatted;
     }
 
-    private static Task parseTask(String line) {
+    private static Task parseTask(String line) throws JeffException {
         String[] parts = line.split("\\|");
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
@@ -167,7 +159,11 @@ public class Jeff {
             task = new Todo(description);
             break;
         case "D": 
-            task = new Deadline(description, parts[3]);
+            try {
+                task = new Deadline(description, parts[3]);
+            } catch (JeffException e) {
+                throw new JeffException(e.getMessage());
+            }
             break;
         case "E": 
             task = new Event(description, parts[3]);
@@ -183,7 +179,7 @@ public class Jeff {
         return task;
     }
 
-    private static void added(String input, ArrayList<Task> tasks) {
+    private static void added(String input, TaskList tasks) {
         System.out.println("______________________________");
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
@@ -191,9 +187,10 @@ public class Jeff {
         
     }
 
-    private static void updateStorage(ArrayList<Task> tasks, Storage storage) {
+    private static void updateStorage(TaskList tasks, Storage storage) {
         ArrayList<String> lines = new ArrayList<>();
-        for (Task task : tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
             lines.add(formatTask(task));
         }
         storage.save(lines);
