@@ -1,3 +1,7 @@
+package jeff.command;
+
+import jeff.storage.JeffException;
+
 public class Parser {
 
     public static class Result {

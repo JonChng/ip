@@ -1,5 +1,9 @@
+package jeff.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import jeff.task.Task;
+import jeff.storage.JeffException;
 
 public class Deadline extends Task {
 

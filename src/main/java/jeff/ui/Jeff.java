@@ -1,16 +1,16 @@
-import java.util.ArrayList;
+package jeff.ui;
 
-enum Command {
-    LIST, BYE, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
-    public static Command fromString(String command) {
-        try {
-            return Command.valueOf(command.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-    
-}
+import java.util.ArrayList;
+import jeff.task.TaskList;
+import jeff.task.Todo;
+import jeff.task.Deadline;
+import jeff.task.Event;
+import jeff.task.Task;
+import jeff.command.Command;
+import jeff.command.Parser;
+import jeff.storage.Storage;
+import jeff.storage.JeffException;
+import jeff.ui.UserInterface;
 
 public class Jeff {
     public static void main(String[] args) throws JeffException {
