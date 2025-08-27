@@ -3,6 +3,7 @@ package jeff.ui;
 import java.util.Scanner;
 
 public class UserInterface {
+
     private final Scanner sc;
 
     public UserInterface() {

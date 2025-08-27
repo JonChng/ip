@@ -7,7 +7,6 @@ public class Event extends Task {
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     protected LocalDateTime at;
-    
 
     public Event(String description, String at) {
         super(description, "E");
@@ -36,7 +35,6 @@ public class Event extends Task {
         }
         return null;
     }
-    
 
     @Override
     public String toString() {

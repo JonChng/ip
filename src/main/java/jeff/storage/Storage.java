@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Storage {
+
     private static final String FILE_PATH = "data/tasks.txt";
 
     public ArrayList<String> load() {
@@ -30,7 +31,7 @@ public class Storage {
         try {
             Path path = Paths.get(FILE_PATH);
             Files.createDirectories(path.getParent());
-            Files.write(path, lines); 
+            Files.write(path, lines);
             System.out.println("Tasks saved successfully!");
 
         } catch (IOException e) {

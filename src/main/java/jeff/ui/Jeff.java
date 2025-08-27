@@ -13,6 +13,7 @@ import jeff.storage.JeffException;
 import jeff.ui.UserInterface;
 
 public class Jeff {
+
     public static void main(String[] args) throws JeffException {
 
         UserInterface ui = new UserInterface();
@@ -23,108 +24,102 @@ public class Jeff {
 
         System.out.println("Loaded " + tasks.size() + " task(s) from storage.");
 
-
         boolean shouldBreak = false;
-        
-            while (!shouldBreak) {
-                try {
-                    String input = ui.readCommand();
 
-                    Parser.Result result = Parser.parseCommand(input);
-                    Command cmd = result.command;
-                    String description = result.description; // this is the args
+        while (!shouldBreak) {
+            try {
+                String input = ui.readCommand();
 
-                    if (cmd == Command.BYE) {
+                Parser.Result result = Parser.parseCommand(input);
+                Command cmd = result.command;
+                String description = result.description; // this is the args
+
+                if (cmd == Command.BYE) {
+                    shouldBreak = true;
+                }
+
+                if (cmd == null) {
+                    throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
+                }
+
+                System.out.println("cmd: " + cmd);
+                switch (cmd) {
+                    case LIST:
+                        for (int i = 0; i < tasks.size(); i++) {
+                            if (tasks.get(i) != null) {
+                                System.out.println((i + 1) + ". " + tasks.get(i));
+                            }
+                        }
+                        break;
+                    case BYE:
+
                         shouldBreak = true;
-                    }
+                        break;
 
-                    if (cmd == null) {
-                        throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
-                    }
+                    case MARK:
 
-                    System.out.println("cmd: " + cmd);
-                    switch (cmd) {
-                        case LIST:
-                            for (int i = 0; i < tasks.size(); i++) {
-                                if (tasks.get(i) != null) {
-                                    System.out.println((i + 1) + ". " + tasks.get(i));
-                                }
-                            }
-                            break;
-                        case BYE:
-                            
-                            shouldBreak = true;
-                            break;
+                        int markIdx = Integer.parseInt(description);
+                        tasks.get(markIdx - 1).markAsDone();
+                        System.out.println("Task marked as done!");
+                        System.out.println(tasks.get(markIdx - 1));
+                        System.out.println("______________________________");
+                        break;
 
-                        case MARK:
+                    case UNMARK:
 
-                            int markIdx = Integer.parseInt(description);
-                            tasks.get(markIdx - 1).markAsDone();
-                            System.out.println("Task marked as done!");
-                            System.out.println(tasks.get(markIdx - 1));
-                            System.out.println("______________________________");
-                            break;
-                        
-                        case UNMARK:
+                        int unmarkIdx = Integer.parseInt(description);
+                        tasks.get(unmarkIdx - 1).undo();
+                        System.out.println("Task marked as undone!");
+                        System.out.println(tasks.get(unmarkIdx - 1));
+                        break;
 
-                            int unmarkIdx = Integer.parseInt(description);
-                            tasks.get(unmarkIdx - 1).undo();
-                            System.out.println("Task marked as undone!");
-                            System.out.println(tasks.get(unmarkIdx - 1));
-                            break;
+                    case DELETE:
 
-                        case DELETE:
+                        int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
 
-                            int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
+                        if (idx < 0 || idx >= tasks.size()) {
+                            throw new JeffException("Invalid task number. Please try again.");
+                        }
+                        tasks.remove(idx);
+                        System.out.println("Task has been deleted.");
+                        System.out.println("You now have " + tasks.size() + " tasks in the list.");
+                        break;
 
-                            if (idx < 0 || idx >= tasks.size()) {
-                                throw new JeffException("Invalid task number. Please try again.");
-                            }
-                            tasks.remove(idx);
-                            System.out.println("Task has been deleted.");
-                            System.out.println("You now have " + tasks.size() + " tasks in the list.");
-                            break;
-                        
-                        case TODO:
-                            tasks.add(new Todo(description));
-                            added(input, tasks);
-                            break;
+                    case TODO:
+                        tasks.add(new Todo(description));
+                        added(input, tasks);
+                        break;
 
-                        case DEADLINE:
-                            String[] parts;
-                            if (description.contains("/by")) {
-                                parts = description.split("/by", 2);
-                            } else {
-                                parts = description.split(" ", 2);
-                            }
-                            tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
-                            added(input, tasks);
-                            break;
+                    case DEADLINE:
+                        String[] parts;
+                        if (description.contains("/by")) {
+                            parts = description.split("/by", 2);
+                        } else {
+                            parts = description.split(" ", 2);
+                        }
+                        tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
+                        added(input, tasks);
+                        break;
 
-                        case EVENT:
+                    case EVENT:
 
-                            String[] parts2;
-                            if (description.contains("/at")) {
-                                parts = description.split("/at", 2);
-                            } else {
-                                parts = description.split(" ", 2);
-                            }
-                            tasks.add(new Event(parts[0].trim(), parts[1].trim()));
-                            added(input, tasks);
-                            break;
-                        
-                    }
-                    updateStorage(tasks, storage);
-                    
+                        String[] parts2;
+                        if (description.contains("/at")) {
+                            parts = description.split("/at", 2);
+                        } else {
+                            parts = description.split(" ", 2);
+                        }
+                        tasks.add(new Event(parts[0].trim(), parts[1].trim()));
+                        added(input, tasks);
+                        break;
 
-                    } 
-                
-                
+                }
+                updateStorage(tasks, storage);
 
-            catch (JeffException e) {
+            } catch (JeffException e) {
                 System.out.println(e.getMessage());
-            } 
-        } 
+            }
+        }
         System.out.println("Bye! Hope to you see you again soon!");
 
     }
@@ -155,21 +150,21 @@ public class Jeff {
         Task task;
 
         switch (type) {
-        case "T": 
-            task = new Todo(description);
-            break;
-        case "D": 
-            try {
-                task = new Deadline(description, parts[3]);
-            } catch (JeffException e) {
-                throw new JeffException(e.getMessage());
-            }
-            break;
-        case "E": 
-            task = new Event(description, parts[3]);
-            break;
-        default: 
-            return null;
+            case "T":
+                task = new Todo(description);
+                break;
+            case "D":
+                try {
+                    task = new Deadline(description, parts[3]);
+                } catch (JeffException e) {
+                    throw new JeffException(e.getMessage());
+                }
+                break;
+            case "E":
+                task = new Event(description, parts[3]);
+                break;
+            default:
+                return null;
         }
 
         if (isDone) {
@@ -184,7 +179,7 @@ public class Jeff {
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
         System.out.println("______________________________");
-        
+
     }
 
     private static void updateStorage(TaskList tasks, Storage storage) {
@@ -195,6 +190,5 @@ public class Jeff {
         }
         storage.save(lines);
     }
-
 
 }

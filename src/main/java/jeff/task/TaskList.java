@@ -3,17 +3,19 @@ package jeff.task;
 import java.util.ArrayList;
 
 public class TaskList {
+
     private final ArrayList<Task> tasks;
 
-    public TaskList() { 
+    public TaskList() {
 
-        this.tasks = new ArrayList<>(); 
+        this.tasks = new ArrayList<>();
 
     }
+
     public TaskList(ArrayList<Task> existing) {
 
-         this.tasks = existing; 
-        
+        this.tasks = existing;
+
     }
 
     public void add(Task t) {
