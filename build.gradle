@@ -19,18 +19,6 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 }
 
-spotless {
-    java {
-        // Reorder + group imports (matches SE-EDU convention)
-        importOrder 'java', 'javax', 'org', 'com', ''    // '' = everything else (your packages)
-        removeUnusedImports()
-        // Google Java Format for indentation/spacing
-        googleJavaFormat('1.17.0')
-        // Ensure newline at EOF etc.
-        endWithNewline()
-        trimTrailingWhitespace()
-    }
-}
 
 test {
     useJUnitPlatform()
