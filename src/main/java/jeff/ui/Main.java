@@ -21,6 +21,7 @@ public class Main extends Application {
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaJeff.png"));
+    private final GuiLogic logic = new GuiLogic();
 
     @Override
     public void start(Stage stage) {
@@ -81,8 +82,20 @@ public class Main extends Application {
     }
 
     private void handleUserInput() {
-        dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
-        userInput.clear();
-    }
+        String text = userInput.getText().trim();
+        if (text.isEmpty()) {
+            return;
+        }
 
+        dialogContainer.getChildren().add(DialogBox.getUserDialog(text, userImage));
+
+        GuiLogic.Reply r = logic.handle(text);
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(r.message, dukeImage));
+
+        userInput.clear();
+        if (r.isExit) {
+            javafx.application.Platform.exit();
+        }
+
+    }
 }

@@ -15,4 +15,12 @@ public class DialogBox extends HBox {
         displayPicture = new ImageView(i);
         this.getChildren().addAll(text, displayPicture);
     }
+
+    public static DialogBox getUserDialog(String text, Image img) {
+        return new DialogBox(text, img);
+    }
+
+    public static DialogBox getBotDialog(String text, Image img) {
+        return new DialogBox(text, img);
+    }
 }

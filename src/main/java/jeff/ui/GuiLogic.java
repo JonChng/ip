@@ -1,0 +1,182 @@
+package jeff.ui;
+
+import java.util.ArrayList;
+
+import jeff.command.Command;
+import jeff.command.Parser;
+import jeff.storage.JeffException;
+import jeff.storage.Storage;
+import jeff.task.Deadline;
+import jeff.task.Event;
+import jeff.task.Task;
+import jeff.task.TaskList;
+import jeff.task.Todo;
+
+class GuiLogic {
+
+    static class Reply {
+
+        final String message;
+        final boolean isExit;
+
+        Reply(String message, boolean isExit) {
+            this.message = message;
+            this.isExit = isExit;
+        }
+    }
+
+    private final Storage storage = new Storage();
+    private final TaskList tasks = new TaskList();
+
+    Reply handle(String input) {
+        try {
+            Parser.Result result = Parser.parseCommand(input);
+            Command cmd = result.command;
+            String description = result.description;
+
+            if (cmd == Command.BYE) {
+                return new Reply("Bye! Hope to you see you again soon!", true);
+            }
+
+            if (cmd == null) {
+                throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
+            }
+
+            switch (cmd) {
+                case LIST: {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < tasks.size(); i++) {
+                        if (tasks.get(i) != null) {
+                            sb.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
+                        }
+                    }
+                    return new Reply(sb.toString().trim(), false);
+                }
+
+                case MARK: {
+                    int markIdx = Integer.parseInt(description);
+                    tasks.get(markIdx - 1).markAsDone();
+                    String msg = "Task marked as done!\n" + tasks.get(markIdx - 1) + "\n______________________________";
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case UNMARK: {
+                    int unmarkIdx = Integer.parseInt(description);
+                    tasks.get(unmarkIdx - 1).undo();
+                    String msg = "Task marked as undone!\n" + tasks.get(unmarkIdx - 1);
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case DELETE: {
+                    int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
+                    if (idx < 0 || idx >= tasks.size()) {
+                        throw new JeffException("Invalid task number. Please try again.");
+                    }
+                    tasks.remove(idx);
+                    String msg = "Task has been deleted.\nYou now have " + tasks.size() + " tasks in the list.";
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case TODO: {
+                    tasks.add(new Todo(description));
+                    String msg = added(input, tasks);
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case DEADLINE: {
+                    String[] parts;
+                    if (description.contains("/by")) {
+                        parts = description.split("/by", 2);
+                    } else {
+                        parts = description.split(" ", 2);
+                    }
+                    tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
+                    String msg = added(input, tasks);
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case EVENT: {
+                    String[] parts;
+                    if (description.contains("/at")) {
+                        parts = description.split("/at", 2);
+                    } else {
+                        parts = description.split(" ", 2);
+                    }
+                    tasks.add(new Event(parts[0].trim(), parts[1].trim()));
+                    String msg = added(input, tasks);
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
+
+                case FIND: {
+                    String keyword = description;
+                    String msg = findTasks(tasks, keyword);
+                    // no save
+                    return new Reply(msg, false);
+                }
+            }
+
+            return new Reply("", false);
+
+        } catch (JeffException e) {
+            return new Reply(e.getMessage(), false);
+        } catch (Exception e) {
+            return new Reply("Error: " + e.getMessage(), false);
+        }
+    }
+
+    private static String added(String input, TaskList tasks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("______________________________\n");
+        sb.append("Task has been added: ").append(input).append("\n");
+        sb.append("You now have ").append(tasks.size()).append(" tasks in the list.\n");
+        sb.append("______________________________");
+        return sb.toString();
+    }
+
+    private static String findTasks(TaskList tasks, String keyword) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("______________________________\n");
+        sb.append("Here are the matching tasks in your list:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().contains(keyword)) {
+                sb.append((i + 1)).append(". ").append(task).append("\n");
+            }
+        }
+        sb.append("______________________________");
+        return sb.toString();
+    }
+
+    private static String formatTask(Task t) {
+        String done = t.isDone() ? "1" : "0";
+        String type = t.getType();
+        String description = t.getDescription();
+
+        String formatted = String.format("%s|%s|%s", type, done, description);
+
+        if ("D".equals(type)) {
+            // this is ok beacuse type is deadline, safe typecast
+            formatted += "|" + ((Deadline) t).getForStorage();
+        } else if ("E".equals(type)) {
+            // this is ok beacuse type is event, safe typecast
+            formatted += "|" + ((Event) t).getForStorage();
+        }
+
+        return formatted;
+    }
+
+    private static void updateStorage(TaskList tasks, Storage storage) {
+        ArrayList<String> lines = new ArrayList<>();
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            lines.add(formatTask(task));
+        }
+        storage.save(lines);
+    }
+}
