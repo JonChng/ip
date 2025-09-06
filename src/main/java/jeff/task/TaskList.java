@@ -21,11 +21,11 @@ public class TaskList {
     /**
      * Constructor for a TaskList with existing tasks.
      *
-     * @param existing the existing list of tasks to initialize with
+     * @param existingTasks the existing list of tasks to initialize with
      */
-    public TaskList(ArrayList<Task> existing) {
+    public TaskList(ArrayList<Task> existingTasks) {
 
-        this.tasks = existing;
+        this.tasks = existingTasks;
 
     }
 
