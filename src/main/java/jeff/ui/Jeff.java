@@ -52,82 +52,7 @@ public class Jeff {
                     throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
                 }
 
-                switch (cmd) {
-                    case LIST:
-                        for (int i = 0; i < tasks.size(); i++) {
-                            if (tasks.get(i) != null) {
-                                System.out.println((i + 1) + ". " + tasks.get(i));
-                            }
-                        }
-                        break;
-                    case BYE:
-
-                        shouldBreak = true;
-                        break;
-
-                    case MARK:
-
-                        int markIdx = Integer.parseInt(description);
-                        tasks.get(markIdx - 1).markAsDone();
-                        System.out.println("Task marked as done!");
-                        System.out.println(tasks.get(markIdx - 1));
-                        System.out.println("______________________________");
-                        break;
-
-                    case UNMARK:
-
-                        int unmarkIdx = Integer.parseInt(description);
-                        tasks.get(unmarkIdx - 1).undo();
-                        System.out.println("Task marked as undone!");
-                        System.out.println(tasks.get(unmarkIdx - 1));
-                        break;
-
-                    case DELETE:
-
-                        int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
-
-                        if (idx < 0 || idx >= tasks.size()) {
-                            throw new JeffException("Invalid task number. Please try again.");
-                        }
-                        tasks.remove(idx);
-                        System.out.println("Task has been deleted.");
-                        System.out.println("You now have " + tasks.size() + " tasks in the list.");
-                        break;
-
-                    case TODO:
-                        tasks.add(new Todo(description));
-                        added(input, tasks);
-                        break;
-
-                    case DEADLINE:
-                        String[] parts;
-                        if (description.contains("/by")) {
-                            parts = description.split("/by", 2);
-                        } else {
-                            parts = description.split(" ", 2);
-                        }
-                        tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
-                        added(input, tasks);
-                        break;
-
-                    case EVENT:
-
-                        String[] parts2;
-                        if (description.contains("/at")) {
-                            parts = description.split("/at", 2);
-                        } else {
-                            parts = description.split(" ", 2);
-                        }
-                        tasks.add(new Event(parts[0].trim(), parts[1].trim()));
-                        added(input, tasks);
-                        break;
-
-                    case FIND:
-                        String keyword = description;
-                        findTasks(tasks, keyword);
-                        break;
-
-                }
+                shouldBreak = handleCommand(cmd, description, tasks, input);
                 updateStorage(tasks, storage);
 
             } catch (JeffException e) {
@@ -136,6 +61,84 @@ public class Jeff {
         }
         System.out.println("Bye! Hope to you see you again soon!");
 
+    }
+
+    private static boolean handleCommand(Command cmd, String description, TaskList tasks, String input) throws JeffException {
+        switch (cmd) {
+            case LIST:
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i) != null) {
+                        System.out.println((i + 1) + ". " + tasks.get(i));
+                    }
+                }
+                break;
+            case BYE:
+                return true;
+
+            case MARK:
+
+                int markIdx = Integer.parseInt(description);
+                tasks.get(markIdx - 1).markAsDone();
+                System.out.println("Task marked as done!");
+                System.out.println(tasks.get(markIdx - 1));
+                System.out.println("______________________________");
+                break;
+
+            case UNMARK:
+
+                int unmarkIdx = Integer.parseInt(description);
+                tasks.get(unmarkIdx - 1).undo();
+                System.out.println("Task marked as undone!");
+                System.out.println(tasks.get(unmarkIdx - 1));
+                break;
+
+            case DELETE:
+
+                int idx = (Integer.parseInt(description) - 1); // This would be the index to be deleted.
+
+                if (idx < 0 || idx >= tasks.size()) {
+                    throw new JeffException("Invalid task number. Please try again.");
+                }
+                tasks.remove(idx);
+                System.out.println("Task has been deleted.");
+                System.out.println("You now have " + tasks.size() + " tasks in the list.");
+                break;
+
+            case TODO:
+                tasks.add(new Todo(description));
+                added(input, tasks);
+                break;
+
+            case DEADLINE:
+                String[] parts;
+                if (description.contains("/by")) {
+                    parts = description.split("/by", 2);
+                } else {
+                    parts = description.split(" ", 2);
+                }
+                tasks.add(new Deadline(parts[0].trim(), parts[1].trim()));
+                added(input, tasks);
+                break;
+
+            case EVENT:
+
+                String[] parts2;
+                if (description.contains("/at")) {
+                    parts = description.split("/at", 2);
+                } else {
+                    parts = description.split(" ", 2);
+                }
+                tasks.add(new Event(parts[0].trim(), parts[1].trim()));
+                added(input, tasks);
+                break;
+
+            case FIND:
+                String keyword = description;
+                findTasks(tasks, keyword);
+                break;
+
+        }
+        return false;
     }
 
     private static void findTasks(TaskList tasks, String keyword) {
