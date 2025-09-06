@@ -17,6 +17,8 @@ import jeff.task.Todo;
  */
 public class Jeff {
 
+    private static final String SPACER = "______________________________";
+
     /**
      * Entry point for the Jeff chatbot application. Initializes and runs the
      * system.
@@ -81,7 +83,7 @@ public class Jeff {
                 tasks.get(markIdx - 1).markAsDone();
                 System.out.println("Task marked as done!");
                 System.out.println(tasks.get(markIdx - 1));
-                System.out.println("______________________________");
+                System.out.println(SPACER);
                 break;
 
             case UNMARK:
@@ -143,7 +145,7 @@ public class Jeff {
 
     private static void findTasks(TaskList tasks, String keyword) {
 
-        System.out.println("______________________________");
+        System.out.println(SPACER);
         System.out.println("Here are the matching tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
@@ -152,7 +154,7 @@ public class Jeff {
                 System.out.println((i + 1) + ". " + task);
             }
         }
-        System.out.println("______________________________");
+        System.out.println(SPACER);
 
     }
 
@@ -207,10 +209,10 @@ public class Jeff {
     }
 
     private static void added(String input, TaskList tasks) {
-        System.out.println("______________________________");
+        System.out.println(SPACER);
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
-        System.out.println("______________________________");
+        System.out.println(SPACER);
 
     }
 
