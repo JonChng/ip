@@ -17,6 +17,7 @@ public class Parser {
 
         /**
          * Constructor for Result with specified command and description.
+         *
          * @param command the parsed command enum value
          * @param description the command description/arguments
          */
@@ -27,8 +28,9 @@ public class Parser {
     }
 
     /**
-     * Parse full command string into a Result object.
-     * Split input into command and description parts.
+     * Parse full command string into a Result object. Split input into command
+     * and description parts.
+     *
      * @param fullCommand the complete command string from user input
      * @return a Result object containing the parsed command and description
      * @throws JeffException if the command is invalid or cannot be parsed
@@ -37,9 +39,9 @@ public class Parser {
 
         String[] split = fullCommand.trim().split("\\s+", 2);
         String description = split.length > 1 ? split[1] : "";
-        Command cmd = Command.fromString(split[0]);
+        Command command = Command.fromString(split[0]);
 
-        if (cmd == null) {
+        if (command == null) {
             throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
         }
 
