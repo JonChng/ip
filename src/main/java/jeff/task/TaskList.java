@@ -56,6 +56,7 @@ public class TaskList {
      * @return the removed task
      */
     public Task remove(int i) {
+        assert i >= 0 && i < tasks.size() : "Task index out of bounds";
         return tasks.remove(i);
     }
 
