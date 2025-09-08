@@ -65,8 +65,8 @@ public class Jeff {
 
     }
 
-    private static boolean handleCommand(Command cmd, String description, TaskList tasks, String input) throws JeffException {
-        switch (cmd) {
+    private static boolean handleCommand(Command command, String description, TaskList tasks, String input) throws JeffException {
+        switch (command) {
             case LIST:
                 for (int i = 0; i < tasks.size(); i++) {
                     if (tasks.get(i) != null) {
@@ -124,7 +124,6 @@ public class Jeff {
 
             case EVENT:
 
-                String[] parts2;
                 if (description.contains("/at")) {
                     parts = description.split("/at", 2);
                 } else {
@@ -173,39 +172,6 @@ public class Jeff {
         }
 
         return formatted;
-    }
-
-    private static Task parseTask(String line) throws JeffException {
-        String[] parts = line.split("\\|");
-        String type = parts[0];
-        boolean isDone = parts[1].equals("1");
-        String description = parts[2];
-
-        Task task;
-
-        switch (type) {
-            case "T":
-                task = new Todo(description);
-                break;
-            case "D":
-                try {
-                    task = new Deadline(description, parts[3]);
-                } catch (JeffException e) {
-                    throw new JeffException(e.getMessage());
-                }
-                break;
-            case "E":
-                task = new Event(description, parts[3]);
-                break;
-            default:
-                return null;
-        }
-
-        if (isDone) {
-            task.markAsDone();
-        }
-
-        return task;
     }
 
     private static void added(String input, TaskList tasks) {
