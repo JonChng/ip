@@ -45,6 +45,6 @@ public class Parser {
             throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
         }
 
-        return new Result(cmd, description);
+        return new Result(command, description);
     }
 }
