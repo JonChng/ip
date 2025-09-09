@@ -8,6 +8,7 @@ import jeff.storage.JeffException;
 import jeff.storage.Storage;
 import jeff.task.Deadline;
 import jeff.task.Event;
+import jeff.task.FixedDurationTask;
 import jeff.task.Task;
 import jeff.task.TaskList;
 import jeff.task.Todo;
@@ -119,6 +120,36 @@ class GuiLogic {
                     // no save
                     return new Reply(msg, false);
                 }
+
+                case FIXEDDURATION: {
+                    if (description.isBlank()) {
+                        throw new JeffException("Usage: fixedduration <desc> for <n> hours");
+                    }
+
+                    String[] fd = description.split(" for ", 2);
+                    if (fd.length != 2) {
+                        throw new JeffException("Usage: fixedduration <desc> for <n> hours");
+                    }
+
+                    String desc = fd[0].trim();
+                    String hoursString = fd[1].trim();
+
+                    int hours;
+                    try {
+                        hours = Integer.parseInt(hoursString.split(" ")[0]);
+                    } catch (NumberFormatException e) {
+                        throw new JeffException("Duration must be an integer.");
+                    }
+
+                    if (hours <= 0) {
+                        throw new JeffException("Duration must be > 0.");
+                    }
+
+                    tasks.add(new FixedDurationTask(desc, hours));
+                    String msg = added(input, tasks);
+                    updateStorage(tasks, storage);
+                    return new Reply(msg, false);
+                }
             }
 
             return new Reply("", false);
@@ -166,6 +197,8 @@ class GuiLogic {
         } else if ("E".equals(type)) {
             // this is ok beacuse type is event, safe typecast
             formatted += "|" + ((Event) t).getForStorage();
+        } else if ("FD".equals(type)) {
+            formatted += "|" + ((FixedDurationTask) t).getDuration();
         }
 
         return formatted;
