@@ -10,7 +10,7 @@ public class TaskList {
     private final ArrayList<Task> tasks;
 
     /**
-     * Constructor for an empty TaskList.
+     * Creates an empty TaskList.
      */
     public TaskList() {
 
@@ -19,7 +19,7 @@ public class TaskList {
     }
 
     /**
-     * Constructor for a TaskList with existing tasks.
+     * Creates a TaskList with existing tasks.
      *
      * @param existingTasks the existing list of tasks to initialize with
      */
@@ -30,7 +30,7 @@ public class TaskList {
     }
 
     /**
-     * Add a task to the list.
+     * Adds a task to the list.
      *
      * @param t the task to add
      */
@@ -39,10 +39,11 @@ public class TaskList {
     }
 
     /**
-     * Get a task at the specified index.
+     * Gets a task at the specified index.
      *
      * @param i the index of the task to get
      * @return the task at the specified index
+     * @throws AssertionError if the index is out of bounds
      */
     public Task get(int i) {
         assert i >= 0 && i < tasks.size() : "Task index out of bounds";
@@ -50,10 +51,11 @@ public class TaskList {
     }
 
     /**
-     * Remove a task at the specified index.
+     * Removes a task at the specified index.
      *
      * @param i the index of the task to remove
      * @return the removed task
+     * @throws AssertionError if the index is out of bounds
      */
     public Task remove(int i) {
         assert i >= 0 && i < tasks.size() : "Task index out of bounds";
@@ -61,7 +63,7 @@ public class TaskList {
     }
 
     /**
-     * Get the current number of tasks in the list.
+     * Gets the current number of tasks in the list.
      *
      * @return the size of the task list
      */
