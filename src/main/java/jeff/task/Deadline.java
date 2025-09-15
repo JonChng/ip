@@ -53,7 +53,7 @@ public class Deadline extends Task {
 
     /**
      * Parses a date string into a LocalDateTime object using multiple
-     * acceptable formats. S
+     * acceptable formats.
      *
      * @param date the date string to parse
      * @return the parsed LocalDateTime object

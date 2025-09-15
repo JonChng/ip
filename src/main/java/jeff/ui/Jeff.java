@@ -65,6 +65,19 @@ public class Jeff {
 
     }
 
+    /**
+     * Handles the execution of a parsed command.
+     *
+     * Processes different types of commands including LIST, BYE, MARK, UNMARK,
+     * DELETE, TODO, DEADLINE, EVENT, and FIND. E
+     *
+     * @param command the command to execute
+     * @param description the command arguments or description
+     * @param tasks the task list to operate on
+     * @param input the original user input string
+     * @return true if the application should exit, false otherwise
+     * @throws JeffException if an error occurs during command execution
+     */
     private static boolean handleCommand(Command command, String description, TaskList tasks, String input) throws JeffException {
         switch (command) {
             case LIST:
@@ -135,6 +148,14 @@ public class Jeff {
         return false;
     }
 
+    /**
+     * Updates the completion status of a task at the specified index and
+     * provides user print statement.
+     *
+     * @param tasks task list containing the task to update
+     * @param isDone true to mark as done, false to mark as undone
+     * @param idx idx of the task to update
+     */
     private static void updateTask(TaskList tasks, boolean isDone, int idx) {
 
         if (isDone) {
@@ -150,6 +171,13 @@ public class Jeff {
         }
     }
 
+    /**
+     * Deletes a task from the task list at the specified index and provides
+     * user print statement.
+     *
+     * @param tasks task list to remove the task from
+     * @param idx idx of the task to delete
+     */
     private static void deleteTask(TaskList tasks, int idx) {
         tasks.remove(idx);
         System.out.println("Task has been deleted.");
@@ -157,6 +185,13 @@ public class Jeff {
         System.out.println(SPACER);
     }
 
+    /**
+     * Searches for and displays tasks containing the specified keyword and
+     * provides user print statement.
+     *
+     * @param tasks task list to search through
+     * @param keyword the keyword to search for in task descriptions
+     */
     private static void findTasks(TaskList tasks, String keyword) {
 
         System.out.println(SPACER);
@@ -172,6 +207,12 @@ public class Jeff {
 
     }
 
+    /**
+     * Formats a task for storage persistence and provides user print statement.
+     *
+     * @param t task to format
+     * @return string representation of the task for storage
+     */
     private static String formatTask(Task t) {
 
         String done = t.isDone() ? "1" : "0";
@@ -189,6 +230,13 @@ public class Jeff {
         return formatted;
     }
 
+    /**
+     * Displays confirmation message when a task is successfully added and
+     * provides user print statement.
+     *
+     * @param input original user input that created the task
+     * @param tasks task list that the task was added to
+     */
     private static void added(String input, TaskList tasks) {
 
         System.out.println(SPACER);
@@ -198,6 +246,13 @@ public class Jeff {
 
     }
 
+    /**
+     * Converts all tasks in the task list to their storage format and saves
+     * them provides user print statement.
+     *
+     * @param tasks task list to save
+     * @param storage storage instance to save tasks to
+     */
     private static void updateStorage(TaskList tasks, Storage storage) {
         ArrayList<String> lines = new ArrayList<>();
         for (int i = 0; i < tasks.size(); i++) {
