@@ -80,18 +80,13 @@ public class Jeff {
             case MARK:
 
                 int markIdx = Integer.parseInt(description);
-                tasks.get(markIdx - 1).markAsDone();
-                System.out.println("Task marked as done!");
-                System.out.println(tasks.get(markIdx - 1));
-                System.out.println(SPACER);
+                updateTask(tasks, true, markIdx - 1);
                 break;
 
             case UNMARK:
 
                 int unmarkIdx = Integer.parseInt(description);
-                tasks.get(unmarkIdx - 1).undo();
-                System.out.println("Task marked as undone!");
-                System.out.println(tasks.get(unmarkIdx - 1));
+                updateTask(tasks, false, unmarkIdx - 1);
                 break;
 
             case DELETE:
@@ -101,9 +96,7 @@ public class Jeff {
                 if (idx < 0 || idx >= tasks.size()) {
                     throw new JeffException("Invalid task number. Please try again.");
                 }
-                tasks.remove(idx);
-                System.out.println("Task has been deleted.");
-                System.out.println("You now have " + tasks.size() + " tasks in the list.");
+                deleteTask(tasks, idx);
                 break;
 
             case TODO:
@@ -142,6 +135,28 @@ public class Jeff {
         return false;
     }
 
+    private static void updateTask(TaskList tasks, boolean isDone, int idx) {
+
+        if (isDone) {
+            tasks.get(idx).markAsDone();
+            System.out.println("Task marked as done!");
+            System.out.println(tasks.get(idx));
+            System.out.println(SPACER);
+        } else {
+            tasks.get(idx).undo();
+            System.out.println("Task marked as undone!");
+            System.out.println(tasks.get(idx));
+            System.out.println(SPACER);
+        }
+    }
+
+    private static void deleteTask(TaskList tasks, int idx) {
+        tasks.remove(idx);
+        System.out.println("Task has been deleted.");
+        System.out.println("You now have " + tasks.size() + " tasks in the list.");
+        System.out.println(SPACER);
+    }
+
     private static void findTasks(TaskList tasks, String keyword) {
 
         System.out.println(SPACER);
@@ -175,6 +190,7 @@ public class Jeff {
     }
 
     private static void added(String input, TaskList tasks) {
+
         System.out.println(SPACER);
         System.out.println("Task has been added: " + input);
         System.out.println("You now have " + tasks.size() + " tasks in the list.");
