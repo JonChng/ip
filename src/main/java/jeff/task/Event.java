@@ -53,7 +53,10 @@ public class Event extends Task {
      */
     private static LocalDateTime parseDate(String date) {
 
-        String[] acceptableFormats = {"d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm"};
+        String[] acceptableFormats = {
+                "d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm",
+                "d/M/yyyy HH:mm", "dd/MM/yyyy HH:mm", "yyyy-MM-dd HH:mm"
+        };
 
         for (String format : acceptableFormats) {
             try {

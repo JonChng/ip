@@ -36,13 +36,17 @@ public class Parser {
      * @throws JeffException if the command is invalid or cannot be parsed
      */
     public static Result parseCommand(String fullCommand) throws JeffException {
+        String trimmed = fullCommand == null ? "" : fullCommand.trim();
+        if (trimmed.isEmpty()) {
+            throw new JeffException("Please enter a command. Try 'list', 'todo', 'deadline', 'event', 'find', 'mark', 'unmark', 'delete', or 'bye'.");
+        }
 
-        String[] split = fullCommand.trim().split("\\s+", 2);
+        String[] split = trimmed.split("\\s+", 2);
         String description = split.length > 1 ? split[1] : "";
         Command command = Command.fromString(split[0]);
 
         if (command == null) {
-            throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
+            throw new JeffException("Unknown command: '" + split[0] + "'. Try 'list', 'todo', 'deadline', 'event', 'find', 'mark', 'unmark', 'delete', or 'bye'.");
         }
 
         return new Result(command, description);

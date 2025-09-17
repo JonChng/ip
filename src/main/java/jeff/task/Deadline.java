@@ -61,16 +61,19 @@ public class Deadline extends Task {
      */
     private static LocalDateTime parseDate(String date) throws JeffException {
 
-        String[] acceptableFormats = {"d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm"};
+        String[] acceptableFormats = {
+                "d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm",
+                "d/M/yyyy HH:mm", "dd/MM/yyyy HH:mm", "yyyy-MM-dd HH:mm"
+        };
 
         for (String format : acceptableFormats) {
             try {
                 return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
-            } catch (Exception e) {
-                throw new JeffException("Invalid date format. Please use the format: yyyy-MM-dd HHmm");
+            } catch (Exception ignore) {
+                // try next format
             }
         }
-        return null;
+        throw new JeffException("Invalid date format. Please use yyyy-MM-dd HHmm (or HH:mm), d/M/yyyy HHmm (or HH:mm).");
     }
 
     /**

@@ -11,6 +11,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/* Code from this class was taken from the CS2103T/iP teaching materials and SE-EDU sample projects. */
 public class Main extends Application {
 
     private ScrollPane scrollPane;
@@ -19,8 +20,8 @@ public class Main extends Application {
     private Button sendButton;
     private Scene scene;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaJeff.png"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
+    private final Image jeffImage = new Image(this.getClass().getResourceAsStream("/images/DaJeff.png"));
     private final GuiLogic logic = new GuiLogic();
 
     @Override
@@ -43,7 +44,7 @@ public class Main extends Application {
         stage.show();
 
         //More code to be added here later
-        stage.setTitle("Duke");
+        stage.setTitle("Jeff the Chatbot");
         stage.setResizable(false);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
@@ -90,7 +91,7 @@ public class Main extends Application {
         dialogContainer.getChildren().add(DialogBox.getUserDialog(text, userImage));
 
         GuiLogic.Reply r = logic.handle(text);
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(r.message, dukeImage));
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(r.message, jeffImage));
 
         userInput.clear();
         if (r.isExit) {

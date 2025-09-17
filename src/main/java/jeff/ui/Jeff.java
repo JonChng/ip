@@ -119,7 +119,9 @@ public class Jeff {
 
             case DEADLINE:
                 String[] parts;
-                if (description.contains("/by")) {
+                if (description.contains(" by ")) {
+                    parts = description.split(" by ", 2);
+                } else if (description.contains("/by")) {
                     parts = description.split("/by", 2);
                 } else {
                     parts = description.split(" ", 2);

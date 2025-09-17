@@ -40,7 +40,7 @@ class GuiLogic {
             }
 
             if (cmd == null) {
-                throw new JeffException("EXCUSEEE MEEEE. THIS IS A INVALID COMMAND??!!! Try again.");
+                throw new JeffException("Unknown command. Try 'list', 'todo', 'deadline', 'event', 'find', 'mark', 'unmark', 'delete', or 'bye'.");
             }
 
             switch (cmd) {
@@ -90,7 +90,9 @@ class GuiLogic {
 
                 case DEADLINE: {
                     String[] parts;
-                    if (description.contains("/by")) {
+                    if (description.contains(" by ")) {
+                        parts = description.split(" by ", 2);
+                    } else if (description.contains("/by")) {
                         parts = description.split("/by", 2);
                     } else {
                         parts = description.split(" ", 2);
