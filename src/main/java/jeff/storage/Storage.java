@@ -33,7 +33,7 @@ public class Storage {
             lines.addAll(Files.readAllLines(path));
 
         } catch (IOException e) {
-            System.out.println("Could not read storage. Starting with an empty list.");
+            System.out.println("File not found: " + e.getMessage());
         }
         assert lines != null : "Lines should not be null";
         return lines;

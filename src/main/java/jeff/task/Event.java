@@ -10,7 +10,9 @@ import java.time.format.DateTimeFormatter;
 public class Event extends Task {
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
     protected LocalDateTime at;
+    private final String originalAt;
 
     /**
      * Creates a new Event task with the specified description and event time.
@@ -20,8 +22,8 @@ public class Event extends Task {
      */
     public Event(String description, String at) {
         super(description, "E");
-
-        this.at = parseDate(at.trim());
+        this.originalAt = at == null ? "" : at.trim();
+        this.at = parseDate(this.originalAt);
     }
 
     /**
@@ -30,7 +32,10 @@ public class Event extends Task {
      * @return the event time as a string
      */
     public String getAt() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy h:mma");
+        if (at == null) {
+            return originalAt.isEmpty() ? "invalid date" : originalAt;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy hh:mm");
         return at.format(formatter);
     }
 
@@ -40,6 +45,9 @@ public class Event extends Task {
      * @return the event time as a string for storage
      */
     public String getForStorage() {
+        if (at == null) {
+            return originalAt;
+        }
         return at.format(FORMAT);
     }
 
@@ -54,10 +62,9 @@ public class Event extends Task {
     private static LocalDateTime parseDate(String date) {
 
         String[] acceptableFormats = {
-                "d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm",
-                "d/M/yyyy HH:mm", "dd/MM/yyyy HH:mm", "yyyy-MM-dd HH:mm"
+            "d/M/yyyy HHmm", "dd/MM/yyyy HHmm", "yyyy-MM-dd HHmm",
+            "d/M/yyyy HH:mm", "dd/MM/yyyy HH:mm", "yyyy-MM-dd HH:mm"
         };
-
         for (String format : acceptableFormats) {
             try {
                 return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(format));
