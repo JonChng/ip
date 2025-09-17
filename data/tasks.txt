@@ -1,1 +1,1 @@
-FD|0|eat|3
+T|0|eat food
