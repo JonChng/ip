@@ -1,2 +1,5 @@
-E|0|meeting|at mon 2–4pm
-T|0|eat food
+D|0|eat|2025-10-22 1500
+T|0|eat
+T|0|hello
+T|0|byebye
+D|0|eat|2025-10-10 1600

@@ -29,6 +29,15 @@ class GuiLogic {
     private final Storage storage = new Storage();
     private final TaskList tasks = new TaskList();
 
+    GuiLogic() {
+        // Load existing tasks from storage at startup
+        ArrayList<String> lines = storage.load();
+        ArrayList<Task> existingTasks = parseStoredLines(lines);
+        for (Task t : existingTasks) {
+            tasks.add(t);
+        }
+    }
+
     Reply handle(String input) {
         try {
             Parser.Result result = Parser.parseCommand(input);
@@ -214,5 +223,66 @@ class GuiLogic {
         }
         storage.save(lines);
     }
-    
+
+    private static ArrayList<Task> parseStoredLines(ArrayList<String> tasks) {
+        ArrayList<Task> result = new ArrayList<>();
+        if (tasks == null) {
+            return result;
+        }
+        for (String task : tasks) {
+            try {
+                if (task == null || task.isBlank()) {
+                    continue;
+                }
+                String[] parts = task.split("\\|", -1);
+                if (parts.length < 3) {
+                    continue;
+                }
+                String type = parts[0];
+                String done = parts[1];
+                String desc = parts[2];
+
+                Task t;
+                switch (type) {
+                    case "T":
+                        t = new Todo(desc);
+                        break;
+                    case "D":
+                        if (parts.length < 4) {
+                            continue;
+                        }
+                        t = new Deadline(desc, parts[3]);
+                        break;
+                    case "E":
+                        if (parts.length < 4) {
+                            continue;
+                        }
+                        t = new Event(desc, parts[3]);
+                        break;
+                    case "FD":
+                        if (parts.length < 4) {
+                            continue;
+                        }
+                        int duration;
+                        try {
+                            duration = Integer.parseInt(parts[3]);
+                        } catch (NumberFormatException e) {
+                            continue;
+                        }
+                        t = new FixedDurationTask(desc, duration);
+                        break;
+                    default:
+                        continue;
+                }
+
+                if ("1".equals(done)) {
+                    t.markAsDone();
+                }
+                result.add(t);
+            } catch (Exception e) {
+                System.out.println("Skipping invalid task: " + task);
+            }
+        }
+        return result;
+    }
 }

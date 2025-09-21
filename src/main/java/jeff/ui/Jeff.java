@@ -32,7 +32,8 @@ public class Jeff {
         ui.welcome();
 
         Storage storage = new Storage();
-        TaskList tasks = new TaskList();
+        ArrayList<String> storedLines = storage.load();
+        TaskList tasks = new TaskList(parseStoredLines(storedLines));
 
         System.out.println("Loaded " + tasks.size() + " task(s) from storage.");
 
@@ -63,6 +64,65 @@ public class Jeff {
         }
         System.out.println("Bye! Hope to you see you again soon!");
 
+    }
+
+    /**
+     * Reads stored lines into Task list.
+     *
+     * Expected formats per line: - T|0 or 1|<description>
+     * - D|0 or 1|<description>|<yyyy-MM-dd HHmm>
+     * - E|0 or 1|<description>|<datetime or original string>
+     *
+     * Lines that cannot be parsed are skipped.
+     */
+    private static ArrayList<Task> parseStoredLines(ArrayList<String> tasks) {
+        ArrayList<Task> result = new ArrayList<>();
+        if (tasks == null) {
+            return result;
+        }
+        for (String task : tasks) {
+            try {
+                if (task == null || task.isBlank()) {
+                    continue;
+                }
+                String[] parts = task.split("\\|", -1);
+                if (parts.length < 3) {
+                    continue;
+                }
+                String type = parts[0];
+                String done = parts[1];
+                String desc = parts[2];
+
+                Task t;
+                switch (type) {
+                    case "T":
+                        t = new Todo(desc);
+                        break;
+                    case "D":
+                        if (parts.length < 4) {
+                            continue;
+                        }
+                        t = new Deadline(desc, parts[3]);
+                        break;
+                    case "E":
+                        if (parts.length < 4) {
+                            continue;
+                        }
+                        t = new Event(desc, parts[3]);
+                        break;
+                    default:
+                        continue;
+                }
+
+                if ("1".equals(done)) {
+                    t.markAsDone();
+                }
+                result.add(t);
+            } catch (Exception e) {
+                System.out.println("Skipping invalid task: " + task);
+            }
+        }
+        return result;
     }
 
     /**
@@ -223,9 +283,9 @@ public class Jeff {
 
         String formatted = String.format("%s|%s|%s", type, done, description);
 
-        if (type == "D") {
+        if ("D".equals(type)) {
             formatted += "|" + ((Deadline) t).getForStorage(); // this is ok beacuse type is deadline, safe typecast
-        } else if (type == "E") {
+        } else if ("E".equals(type)) {
             formatted += "|" + ((Event) t).getForStorage(); // this is ok beacuse type is event, safe typecast
         }
 
